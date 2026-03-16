@@ -111,7 +111,7 @@ That's the only interaction needed with infrastructure files.
 | Files and modules | snake_case | `router.py`, `inmemory.py` |
 | Private attributes | `_leading_underscore` | `self._storage`, `self._queue` |
 | Constants | UPPER_SNAKE_CASE | `TASK_STORAGE_CAPACITY` |
-| Env variables | `PREFIX_UPPER` / `PREFIX_NESTED__FIELD` | `TEMPLE_APP_PORT`, `TEMPLE_REDIS__URL` |
+| Env variables | `UPPER_SNAKE_CASE` / `NESTED__FIELD` | `APP_PORT`, `REDIS__URL` |
 | Setups | Named after their infrastructure | `RedisDependencySetup`, `LocalDependencySetup` |
 
 ---
@@ -410,13 +410,13 @@ class Config(BaseSettings):
 
     SOMESERVICE: SomeServiceConfig = SomeServiceConfig()
 
-    model_config = SettingsConfigDict(env_prefix="TEMPLE_", env_nested_delimiter="__")
+    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", env_nested_delimiter="__")
 ```
 
 Access in a setup:
 
 ```python
-SomeClient(config.SOMESERVICE.URL)  # env: TEMPLE_SOMESERVICE__URL
+SomeClient(config.SOMESERVICE.URL)  # env: SOMESERVICE__URL
 ```
 
 Optional infrastructure (has required fields with no defaults) uses `| None = None`. pydantic-settings auto-constructs it when the env vars are present:
@@ -432,7 +432,7 @@ class Config(BaseSettings):
 
 Rules:
 - Sensitive values use `SecretStr`; access with `.get_secret_value()` only where needed.
-- All env variables follow the `TEMPLE_` prefix with `__` for nesting: `TEMPLE_APP_PORT`, `TEMPLE_SOMESERVICE__URL`.
+- Env variables use `__` for nesting: `APP_PORT`, `SOMESERVICE__URL`.
 - Nested configs are `BaseModel`, never `BaseSettings` — only `Config` is a `BaseSettings`.
 - `Config` is instantiated once in `main.py` and passed to the setup.
 - Optional infrastructure is typed as `SomeConfig | None = None`; the corresponding setup asserts it is set.
@@ -441,7 +441,7 @@ Rules:
 
 ## Authentication
 
-Auth is pre-built in `auth.py` — do not modify it. To enable auth, set `TEMPLE_APP_AUTH_TOKEN` in the environment or `.env` file. If unset, the app starts without auth and logs a warning.
+Auth is pre-built in `auth.py` — do not modify it. To enable auth, set `APP_AUTH_TOKEN` in the environment or `.env` file. If unset, the app starts without auth and logs a warning.
 
 ---
 
