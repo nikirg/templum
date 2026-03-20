@@ -13,7 +13,7 @@ _BASE_DEPS = [
     "uvicorn>=0.41.0",
 ]
 
-app = typer.Typer(help="Temple — FastAPI project scaffold generator.")
+app = typer.Typer(help="Templum — FastAPI project scaffold generator.")
 
 
 @app.command()

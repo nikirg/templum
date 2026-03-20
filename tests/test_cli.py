@@ -3,7 +3,7 @@ from unittest.mock import MagicMock, call, patch
 
 from typer.testing import CliRunner
 
-from temple.cli import _BASE_DEPS, app
+from templum.cli import _BASE_DEPS, app
 
 runner = CliRunner()
 
@@ -39,7 +39,7 @@ def _make_side_effect(tmp_path: Path):
 
 
 def test_new_creates_scaffold(tmp_path: Path) -> None:
-    with patch("temple.cli.subprocess.run", side_effect=_make_side_effect(tmp_path)):
+    with patch("templum.cli.subprocess.run", side_effect=_make_side_effect(tmp_path)):
         result = runner.invoke(app, ["my-project", "--output-dir", str(tmp_path)])
 
     assert result.exit_code == 0, result.output
@@ -63,7 +63,7 @@ def test_new_creates_scaffold(tmp_path: Path) -> None:
 
 
 def test_new_renders_project_name(tmp_path: Path) -> None:
-    with patch("temple.cli.subprocess.run", side_effect=_make_side_effect(tmp_path)):
+    with patch("templum.cli.subprocess.run", side_effect=_make_side_effect(tmp_path)):
         runner.invoke(app, ["my-api", "--output-dir", str(tmp_path)])
 
     config = (tmp_path / "my-api" / "app" / "config.py").read_text()
@@ -72,7 +72,7 @@ def test_new_renders_project_name(tmp_path: Path) -> None:
 
 def test_new_calls_uv_add_with_base_deps(tmp_path: Path) -> None:
     with patch(
-        "temple.cli.subprocess.run", side_effect=_make_side_effect(tmp_path)
+        "templum.cli.subprocess.run", side_effect=_make_side_effect(tmp_path)
     ) as mock_run:
         runner.invoke(app, ["proj", "--output-dir", str(tmp_path)])
 
@@ -83,7 +83,7 @@ def test_new_calls_uv_add_with_base_deps(tmp_path: Path) -> None:
 
 
 def test_new_fails_if_exists(tmp_path: Path) -> None:
-    with patch("temple.cli.subprocess.run", side_effect=_make_side_effect(tmp_path)):
+    with patch("templum.cli.subprocess.run", side_effect=_make_side_effect(tmp_path)):
         runner.invoke(app, ["proj", "--output-dir", str(tmp_path)])
         result = runner.invoke(app, ["proj", "--output-dir", str(tmp_path)])
 

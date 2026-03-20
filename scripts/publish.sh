@@ -4,9 +4,9 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 
 echo "Running checks..."
-uvx ruff check temple/ tests/
-uvx ruff format --check temple/ tests/
-uv run ty check temple/
+uvx ruff check templum/ tests/
+uvx ruff format --check templum/ tests/
+uv run ty check templum/
 uv run pytest
 
 echo "Building..."

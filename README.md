@@ -1,4 +1,4 @@
-# temple
+# Templum
 
 CLI scaffold generator for FastAPI microservices with clean layered architecture and explicit dependency injection. Install the package — one command creates a ready project with dependencies.
 
@@ -7,19 +7,19 @@ Every generated project ships with a `CLAUDE.md` that encodes all architectural 
 ## Installation
 
 ```bash
-uv tool install temple
+uv tool install templum
 ```
 
 ## Usage
 
 ```bash
-temple new my-service
+templum new my-service
 ```
 
 With options:
 
 ```bash
-temple new my-service --output-dir ~/projects --python 3.12
+templum new my-service --output-dir ~/projects --python 3.12
 ```
 
 | Flag | Default | Description |

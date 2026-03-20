@@ -1,5 +1,5 @@
 [project]
-name = "temple"
+name = "templum"
 version = "0.1.0"
 description = "FastAPI project scaffold generator"
 readme = "README.md"
@@ -9,7 +9,7 @@ dependencies = [
 ]
 
 [project.scripts]
-temple = "temple.cli:main"
+templum = "templum.cli:main"
 
 [dependency-groups]
 dev = [
@@ -19,7 +19,7 @@ dev = [
 ]
 
 [tool.ty.src]
-exclude = ["temple/templates"]
+exclude = ["templum/templates"]
 
 [build-system]
 requires = ["hatchling"]
