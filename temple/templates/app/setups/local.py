@@ -5,8 +5,8 @@ from app.setups.base import DependencySetup
 class LocalSetup(DependencySetup):
     INJECTABLE = ()
 
-    def __init__(self, config: Config):
-        self._config = config
+    def __init__(self, config: Config) -> None:
+        pass
 
     async def init(self) -> None:
         pass

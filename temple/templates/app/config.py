@@ -14,7 +14,7 @@ class Setup(StrEnum):
 
 class Config(BaseSettings):
     APP_PORT: int = 8000
-    APP_NAME: str = "temple"
+    APP_NAME: str = "{{project_name}}"
     APP_AUTH_TOKEN: SecretStr | None = None
     APP_SETUP: Setup = Setup.LOCAL
 
