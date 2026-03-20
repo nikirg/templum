@@ -1,18 +1,22 @@
 # Templum
 
+[![PyPI version](https://img.shields.io/pypi/v/templum)](https://pypi.org/project/templum/)
+[![PyPI downloads](https://img.shields.io/pypi/dm/templum)](https://pypi.org/project/templum/)
+
 CLI scaffold generator for FastAPI microservices with clean layered architecture and explicit dependency injection. Install the package — one command creates a ready project with dependencies.
 
 Every generated project ships with a `CLAUDE.md` that encodes all architectural rules so Claude Code works within the project's patterns from the first message.
 
-## Installation
-
-```bash
-uv tool install templum
-```
-
 ## Usage
 
 ```bash
+uvx templum new my-service
+```
+
+Or install globally and use as a persistent command:
+
+```bash
+uv tool install templum
 templum new my-service
 ```
 

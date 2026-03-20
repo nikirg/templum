@@ -1,12 +1,15 @@
 [project]
 name = "templum"
-version = "0.1.0"
+version = "0.1.1"
 description = "FastAPI project scaffold generator"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "typer>=0.15.0",
 ]
+
+[project.urls]
+Repository = "https://github.com/nikirg/templum"
 
 [project.scripts]
 templum = "templum.cli:main"
