@@ -83,4 +83,4 @@ The full spec lives in the generated project's `CLAUDE.md`: layer rules, DI patt
 
 ## License
 
-MIT
+MIT — see [LICENSE](LICENSE).
