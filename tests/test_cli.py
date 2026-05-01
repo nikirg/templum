@@ -187,7 +187,9 @@ def test_hybrid_creates_scaffold(tmp_path: Path) -> None:
 
 def test_hybrid_renders_project_name(tmp_path: Path) -> None:
     with patch("templum.cli.subprocess.run", side_effect=_make_side_effect(tmp_path)):
-        runner.invoke(app, ["my-svc", "--output-dir", str(tmp_path), "--type", "hybrid"])
+        runner.invoke(
+            app, ["my-svc", "--output-dir", str(tmp_path), "--type", "hybrid"]
+        )
 
     config = (tmp_path / "my-svc" / "app" / "config.py").read_text()
     assert '"my-svc"' in config
@@ -195,7 +197,9 @@ def test_hybrid_renders_project_name(tmp_path: Path) -> None:
 
 def test_hybrid_adds_scripts_entry(tmp_path: Path) -> None:
     with patch("templum.cli.subprocess.run", side_effect=_make_side_effect(tmp_path)):
-        runner.invoke(app, ["my-svc", "--output-dir", str(tmp_path), "--type", "hybrid"])
+        runner.invoke(
+            app, ["my-svc", "--output-dir", str(tmp_path), "--type", "hybrid"]
+        )
 
     pyproject = (tmp_path / "my-svc" / "pyproject.toml").read_text()
     assert "[project.scripts]" in pyproject
@@ -206,7 +210,9 @@ def test_hybrid_calls_uv_add_with_correct_deps(tmp_path: Path) -> None:
     with patch(
         "templum.cli.subprocess.run", side_effect=_make_side_effect(tmp_path)
     ) as mock_run:
-        runner.invoke(app, ["my-svc", "--output-dir", str(tmp_path), "--type", "hybrid"])
+        runner.invoke(
+            app, ["my-svc", "--output-dir", str(tmp_path), "--type", "hybrid"]
+        )
 
     add_call = next(c for c in mock_run.call_args_list if "add" in c.args[0])
     assert add_call == call(
@@ -216,7 +222,9 @@ def test_hybrid_calls_uv_add_with_correct_deps(tmp_path: Path) -> None:
 
 def test_hybrid_renders_project_name_in_claude_md(tmp_path: Path) -> None:
     with patch("templum.cli.subprocess.run", side_effect=_make_side_effect(tmp_path)):
-        runner.invoke(app, ["my-svc", "--output-dir", str(tmp_path), "--type", "hybrid"])
+        runner.invoke(
+            app, ["my-svc", "--output-dir", str(tmp_path), "--type", "hybrid"]
+        )
 
     claude_md = (tmp_path / "my-svc" / "CLAUDE.md").read_text()
     assert "my-svc" in claude_md
