@@ -43,21 +43,6 @@ When rules conflict, preserve architectural boundaries first, then type safety, 
 
 ---
 
-## Definition of Done
-
-Before considering a change complete, run the standard quality gates:
-
-```bash
-uvx ruff check --fix
-uvx ty check
-uvx ruff format
-uv run pytest
-```
-
-These checks are part of the default delivery workflow. Temporary local exceptions are acceptable while iterating, but final changes should pass all of them.
-
----
-
 ## Default Tooling
 
 These are project defaults, not universal laws. Deviate only when there is a concrete reason and the choice is documented in the project.
@@ -70,29 +55,6 @@ These are project defaults, not universal laws. Deviate only when there is a con
 | Testing               | `pytest` + `pytest-asyncio`                    |
 | Linting / formatting  | `ruff`                                         |
 | Dependency management | `uv`                                           |
-
-### Data model guidance
-
-* Use Pydantic models for request/response DTOs, config, external payloads, and other boundary-facing models.
-* Internal immutable value objects may use `dataclass(frozen=True, slots=True)` when Pydantic adds no value.
-* Avoid passing raw `dict` or `list` through service boundaries when a typed model is practical.
-
-### Third-party clients
-
-* Prefer an official SDK when it fits the project requirements.
-* Use `niquests` when there is no suitable official client or when a direct HTTP client is simpler and more maintainable.
-
-### Dependency management
-
-Use `uv` by default:
-
-```bash
-uv add <package>
-uv remove <package>
-uv sync
-```
-
-Prefer managing dependencies through `uv` commands instead of editing dependency sections manually.
 
 ---
 
@@ -162,67 +124,6 @@ app/
 ### Clients for external and internal APIs
 
 HTTP clients for other services are infrastructure, not services. They live in a dedicated folder following the infrastructure naming rules above and may own their own `schemas.py` and `exceptions.py`. Wrap a client in a service only when business logic (aggregation, enrichment, domain rules) sits on top of it.
-
----
-
-## Naming Conventions
-
-| Item                | Convention                           | Example                           |
-| ------------------- | ------------------------------------ | --------------------------------- |
-| Classes             | `PascalCase`                         | `OrderService`, `RedisRepository` |
-| Functions / methods | `snake_case`                         | `create_order`, `get_order`       |
-| Files / modules     | `snake_case`                         | `router.py`, `repository.py`      |
-| Private attrs       | `_leading_underscore`                | `self._repository`                |
-| Constants           | `UPPER_SNAKE_CASE`                   | `MAX_BATCH_SIZE`                  |
-| Env vars            | `UPPER_SNAKE_CASE` / `NESTED__FIELD` | `APP_PORT`, `REDIS__URL`          |
-| Setups              | name by deployment environment       | `LocalSetup`, `CloudSetup`, `OnPremSetup` |
-
-Additional defaults:
-
-* Name interfaces by role, not by `Base`: `Repository`, `Publisher`, `Notifier`.
-* Name implementations by backend or strategy: `RedisRepository`, `S3BlobStore`, `WebhookNotifier`.
-* Avoid vague names such as `Manager`, `Helper`, `Utils`, `Common`.
-* Prefer domain language over generic technical placeholders.
-
----
-
-## Type Hints
-
-Use modern Python typing consistently.
-
-```python
-class Repository[K, V](ABC):
-    async def get(self, key: K) -> V | None: ...
-
-async def get_entity(entity_id: UUID) -> Entity | None: ...
-```
-
-Rules:
-
-* All public functions and methods must have argument and return type annotations.
-* Avoid `Any` unless it is unavoidable at a boundary.
-* Prefer concrete models, protocols, or interfaces over loosely shaped mappings.
-
----
-
-## Async vs Sync
-
-Use `async` when a function:
-
-* directly performs I/O;
-* or orchestrates async dependencies and must `await` them.
-
-Keep pure logic synchronous.
-
-```python
-async def get_entity(self, entity_id: UUID) -> Entity | None:
-    return await self._repository.get(entity_id)
-
-def _build_not_found_message(self, entity_id: UUID) -> str:
-    return f"Entity {entity_id} not found"
-```
-
-Do not mark a function `async` only because it is called from async code.
 
 ---
 
@@ -389,43 +290,12 @@ Authentication is framework-managed in `auth.py`.
 
 ---
 
-## Logging
-
-Use `loguru` by default.
-
-```python
-from loguru import logger
-
-logger.info("Background worker started")
-logger.info("Processing entity {}", entity_id)
-```
-
-Rules:
-
-* Log facts, not commentary.
-* Never log secrets or raw credentials.
-* Prefer structured, parameterized logs over string concatenation.
-* Use `print()` only for short-lived local debugging, not committed application behavior.
-
----
-
 ## Testing Strategy
-
-### Service tests
-
-* Test business behavior through service interfaces.
-* Fake or mock infrastructure interfaces, not concrete adapters.
-* Cover invariants, branching logic, retries, and idempotency where relevant.
 
 ### Router tests
 
 * Verify request parsing, auth, response codes, and exception translation.
 * Do not re-test service internals here.
-
-### Infrastructure tests
-
-* Verify adapters against the interface contract when one exists; otherwise test the concrete implementation directly.
-* Cover serialization, error handling, cleanup, and integration edge cases.
 
 ### End-to-end tests
 
